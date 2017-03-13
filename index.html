@@ -1,0 +1,121 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Angularjs Form Validation</title>
+
+<!-- CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootswatch/3.3.7/cerulean/bootstrap.min.css" >
+
+<!-- JS -->
+<script src="https://code.angularjs.org/1.4.0/angular.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/angularjs/1.4.0/angular-messages.js"></script>
+<script src="validation.js"></script>
+<style>
+body{ background:#0E192D;}
+h3{color:#00EBEE; text-transform:uppercase; margin-bottom:30px;}
+form{ background:#1e2c4c; padding:15px;box-shadow: 0 2px 3px rgba(0,0,0,.8);border-radius: 5px; margin-top:20px; margin-bottom:20px; color:#00EBEE;}
+.form-control{background:none;border:none; border-bottom:#00EBEE 1px solid;border-radius: 0px; font-size:16px; margin-bottom:10px; padding-left:0; padding-right:0;color:#00EBEE;}
+.form-control:focus{background:none; box-shadow:none;}
+.has-error .help-block, .has-error .control-label, .has-error .radio, .has-error .checkbox, .has-error .radio-inline, .has-error .checkbox-inline, .has-error.radio label, .has-error.checkbox label, .has-error.radio-inline label, .has-error.checkbox-inline label {
+    color: #ff0000;
+}
+.has-error .form-control{border-color:#ff0000;}
+.error{color: #ff0000;}
+table{color:#FFF;}
+</style>
+</head>
+
+<body ng-app="app" ng-controller="UserController as user">
+
+	<div class="container">
+    	<div class="col-lg-4 col-lg-offset-4 col-md-6 col-md-offset-3 col-sm-10 col-sm-offset-1 col-xs-12">
+        	
+            	<form name="userForm" ng-submit="user.register()" role="form" novalidate class="clearfix">
+                	<h3 class="text-center">User Registration</h3>
+                    <div class="form-group clearfix"  ng-class="{ 'has-error': userForm.name.$touched && userForm.name.$invalid }">
+                        <input type="text" class="form-control" name="name" 
+                        ng-model="user.name" 
+                        ng-minlength="5" 
+                        ng-maxlength="10" 
+                        placeholder="Name" 
+                        required/>
+                        <div class="help-block" ng-messages="userForm.name.$error" ng-if="userForm.name.$touched">
+                            <div ng-messages-include="messages.html"></div>
+                        </div>
+                    </div>
+                    <div class="form-group clearfix" ng-class="{ 'has-error': userForm.email.$touched && userForm.email.$invalid }">
+                        <input type="email" name="email" class="form-control" 
+                        ng-model="user.email"
+                        ng-minlength="5"
+                        ng-maxlength="40"
+                        placeholder="Email"
+                        required />
+                        <div class="help-block" ng-messages="userForm.email.$error" ng-if="userForm.email.$touched">
+                            <div ng-messages-include="messages.html"></div>
+                        </div>
+                    </div>
+                    <div class="form-group clearfix" ng-class="{ 'has-error': userForm.phone.$touched && userForm.phone.$invalid }">
+                        <input type="tel" name="phone" class="form-control" 
+                        ng-model="user.phone"
+                        ng-minlength="10"
+                        ng-maxlength="11"
+                        placeholder="Phone No."
+                        ng-pattern="/^[0-9]{10,10}$/"
+                        required />
+                        <div class="help-block" ng-messages="userForm.phone.$error" ng-if="userForm.phone.$touched">
+                            <div ng-messages-include="messages.html"></div>
+                        </div>
+                    </div>
+                    <div class="form-group clearfix" ng-class="{ 'has-error': userForm.pass.$touched && userForm.pass.$invalid }">
+                        <input type="password" name="pass" class="form-control" 
+                        ng-model="user.pass"
+                        ng-minlength="8"
+                        ng-maxlength="20"
+                        ng-pattern="/^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/"
+                        placeholder="Password"
+                        required />
+                        <div class="help-block" ng-messages="userForm.pass.$error" ng-if="userForm.pass.$touched">
+                            <div ng-messages-include="messages.html"></div>
+                        </div>
+                    </div>
+                    <div class="form-group clearfix" ng-class="{ 'has-error': userForm.confpass.$touched && userForm.confpass.$invalid }">
+                        <input type="password" name="confpass" class="form-control" 
+                        ng-model="user.confpass"
+                        ng-minlength="8"
+                        ng-maxlength="20"
+                        ng-pattern="/^(?=.*[A-Za-z])(?=.*\d)(?=.*[$@$!%*#?&])[A-Za-z\d$@$!%*#?&]{8,}$/"
+                        valid-password-c="userForm.user.pass"
+                        placeholder="Confirm Password"
+                        required />
+                        <div class="help-block" ng-messages="userForm.confpass.$error" ng-if="userForm.confpass.$touched">
+                            <div ng-messages-include="messages.html"></div>
+                        </div>
+                        <p class="error" ng-show="user.pass !== user.confpass">Passwords do not match.</p>
+                    </div>
+                    <div class="btn-group pull-right">
+                    	<input type="submit" class="btn btn-primary" ng-disabled="userForm.$invalid || user.dataLoading" value="Submit">
+                        <img ng-if="user.dataLoading" src="sunny.gif" />
+                        <button class="btn btn-default" type="reset">Reset</button>
+                    </div>                    
+                </form>
+            	
+                <table class="table table-bordered table-condensed">
+                	<tr>
+                    	<th>Name</th>
+                        <th>Email</th>
+                        <th>Phone</th>
+                        <th>Password</th>
+                    </tr>
+                	<tr ng-repeat = "info in usereg.userinfo">
+                        <td>{{ info.name }}</td>
+                        <td>{{ info.email }}</td>
+                        <td>{{ info.phone }}</td>
+                        <td>{{ info.pass }}</td>
+                     </tr>
+                </table>
+        </div>
+    </div>
+
+</body>
+</html>
